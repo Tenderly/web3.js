@@ -25,7 +25,7 @@
 var EventEmitter = require('eventemitter3');
 var helpers = require('./helpers.js');
 var errors = require('web3-core-helpers').errors;
-var Ws = require('websocket').w3cwebsocket;
+var Ws = require('ws');
 
 /**
  * @param {string} url
@@ -101,7 +101,10 @@ WebsocketProvider.prototype.constructor = WebsocketProvider;
  * @returns {void}
  */
 WebsocketProvider.prototype.connect = function () {
-    this.connection = new Ws(this.url, this.protocol, undefined, this.headers, this.requestOptions, this.clientConfig);
+    // TODO: include this.requestOptions and this.clientConfig
+    this.connection = new Ws(this.url, this.protocol, {
+        headers: this.headers,
+    });
     this._addSocketListeners();
 };
 

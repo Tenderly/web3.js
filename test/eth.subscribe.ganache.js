@@ -246,7 +246,6 @@ describe('subscription connect/reconnect', function () {
                     counter++;
                     assert(err.message.includes('CONNECTION ERROR'));
                     assert(err.message.includes('close code `1006`'));
-                    assert(err.message.includes('Connection dropped by remote peer.'));
                 });
 
             // Make sure error handler doesn't fire twice

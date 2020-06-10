@@ -48,11 +48,19 @@ module.exports = {
         return this.ConnectionError('connection not open on send()', event);
     },
     ConnectionCloseError: function (event){
-        if (typeof event === 'object' && event.code && event.reason) {
+        if (typeof event === 'object' && event.code) {
+            if (event.reason) {
+                return this.ConnectionError(
+                    'CONNECTION ERROR: The connection got closed with ' +
+                    'the close code `' + event.code + '` and the following ' +
+                    'reason string `' + event.reason + '`',
+                    event
+                );
+            }
+
             return this.ConnectionError(
                 'CONNECTION ERROR: The connection got closed with ' +
-                'the close code `' + event.code + '` and the following ' +
-                'reason string `' + event.reason + '`',
+                'the close code `' + event.code + '`',
                 event
             );
         }
