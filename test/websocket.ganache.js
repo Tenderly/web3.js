@@ -26,8 +26,6 @@ describe('WebsocketProvider (ganache)', function () {
             await web3.eth.getBlockNumber();
             assert.fail();
         } catch (err) {
-            assert(err.code, 1006);
-            assert(err.reason, 'connection failed');
             assert(err.message.includes('connection not open on send'));
         }
     });
@@ -44,7 +42,7 @@ describe('WebsocketProvider (ganache)', function () {
 
         await new Promise(async function(resolve){
             web3.currentProvider.once('error', function(err){
-                assert(err.message.includes('Connection dropped by remote peer.'))
+                assert(err.message.includes('The connection got closed'))
                 assert(err.message.includes('1006'));
                 resolve();
             });
@@ -64,9 +62,8 @@ describe('WebsocketProvider (ganache)', function () {
         await web3.eth.getBlockNumber();
 
         await new Promise(async function(resolve){
-            web3.currentProvider.once('error', function(err){
-                assert(err.message.includes('1012'));
-                assert(err.message.includes('restart'));
+            web3.currentProvider.once('close', function(event){
+                assert.strictEqual(event.code, 1000);
                 resolve();
             });
 
@@ -144,8 +141,6 @@ describe('WebsocketProvider (ganache)', function () {
 
         try { await web3.eth.getBlockNumber(); } catch (err) {
             assert(err.message.includes('connection not open on send'));
-            assert(err.code, 1006);
-            assert(err.reason, 'connection failed');
 
             try {
                 await web3.eth.getBlockNumber();

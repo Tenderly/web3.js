@@ -198,6 +198,15 @@ WebsocketProvider.prototype._onClose = function (event) {
 };
 
 /**
+ * Listener for the `error` event of the underlying WebSocket object
+ *
+ * @method _onError
+ *
+ * @returns {void}
+ */
+WebsocketProvider.prototype._onError = function () {};
+
+/**
  * Will add the required socket listeners
  *
  * @method _addSocketListeners
@@ -208,6 +217,7 @@ WebsocketProvider.prototype._addSocketListeners = function () {
     this.connection.addEventListener('message', this._onMessage.bind(this));
     this.connection.addEventListener('open', this._onConnect.bind(this));
     this.connection.addEventListener('close', this._onClose.bind(this));
+    this.connection.addEventListener('error', this._onError.bind(this));
 };
 
 /**
@@ -221,6 +231,7 @@ WebsocketProvider.prototype._removeSocketListeners = function () {
     this.connection.removeEventListener('message', this._onMessage);
     this.connection.removeEventListener('open', this._onConnect);
     this.connection.removeEventListener('close', this._onClose);
+    this.connection.removeEventListener('error', this._onError);
 };
 
 /**
